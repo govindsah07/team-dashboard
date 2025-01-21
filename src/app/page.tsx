@@ -1,93 +1,54 @@
-'use client';
+"use client";
+import { useEffect, useState } from "react";
 
-import { useState, useEffect } from 'react';
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+}
 
-export default function TaskManagement() {
-  const [team, setTeam] = useState([]);
-  const [newMember, setNewMember] = useState({ name: '', role: '', bio: '' });
-  const [loading, setLoading] = useState(false);
+export default function Home() {
+  const [team, setTeam] = useState<TeamMember[]>([]);
+  const [search, setSearch] = useState("");
 
-  // Fetch team data from the backend
   useEffect(() => {
-    fetch('/api/team')
-      .then((res) => res.json())
-      .then((data) => setTeam(data))
-      .catch((err) => console.error(err));
+    // Dummy data for demonstration
+    const dummyData = [
+      { id: "1", name: "Alice", role: "Developer", bio: "React & Node.js" },
+      { id: "2", name: "Bob", role: "Designer", bio: "UI/UX Design" },
+      { id: "3", name: "Charlie", role: "Manager", bio: "Project Management" },
+    ];
+    setTeam(dummyData);
   }, []);
 
-  // Add a new member
-  const addMember = async () => {
-    if (!newMember.name || !newMember.role || !newMember.bio) {
-      alert('Please fill in all fields.');
-      return;
-    }
-    setLoading(true);
-    await fetch('/api/team', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newMember),
-    });
-    setTeam((prev) => [...prev, { id: Date.now(), ...newMember }]);
-    setNewMember({ name: '', role: '', bio: '' });
-    setLoading(false);
-  };
-
-  // Delete a member
-  const deleteMember = async (id: number) => {
-    setLoading(true);
-    await fetch('/api/team', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-    setTeam((prev) => prev.filter((member) => member.id !== id));
-    setLoading(false);
-  };
+  const filteredTeam = team.filter(
+    (member) =>
+      member.name.toLowerCase().includes(search.toLowerCase()) ||
+      member.role.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-8 text-center"></h1>
-
-      {/* Add Member Form */}
-      <div className="form-container">
-        <h2 className="text-xl font-bold mb-4">Add New Team Member</h2>
-        <input
-          type="text"
-          placeholder="Name"
-          value={newMember.name}
-          onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Role"
-          value={newMember.role}
-          onChange={(e) => setNewMember({ ...newMember, role: e.target.value })}
-        />
-        <textarea
-          placeholder="Bio"
-          value={newMember.bio}
-          onChange={(e) => setNewMember({ ...newMember, bio: e.target.value })}
-        />
-        <button className="submit-btn" onClick={addMember} disabled={loading}>
-          {loading ? 'Adding...' : 'Submit'}
-        </button>
-      </div>
-
-      {/* Team Members List */}
-      <div className="mt-6">
-        {team.map((member) => (
-          <div key={member.id} className="card">
-            <h2>{member.name}</h2>
-            <p><strong>Role:</strong> {member.role}</p>
-            <p><strong>Bio:</strong> {member.bio}</p>
-            <button
-              className="delete-btn mt-2"
-              onClick={() => deleteMember(member.id)}
-              disabled={loading}
-            >
-              {loading ? 'Deleting...' : 'Delete'}
-            </button>
-          </div>
+      <h1 className="text-2xl font-bold mb-4">Team Dashboard</h1>
+      <input
+        type="text"
+        placeholder="Search by name or role"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="p-2 border rounded mb-4 w-full"
+      />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {filteredTeam.map((member) => (
+          <a
+            key={member.id}
+            href={`/team/${member.id}`}
+            className="p-4 border rounded shadow hover:bg-gray-100"
+          >
+            <h2 className="text-lg font-semibold">{member.name}</h2>
+            <p>{member.role}</p>
+            <p className="text-sm text-gray-600">{member.bio}</p>
+          </a>
         ))}
       </div>
     </div>
