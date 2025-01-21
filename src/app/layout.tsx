@@ -1,8 +1,6 @@
-import Link from 'next/link';
-
 export const metadata = {
-  title: 'Team Dashboard',
-  description: 'Manage team information and tasks',
+  title: "Team Dashboard",
+  description: "Manage team information and tasks",
 };
 
 export default function RootLayout({
@@ -13,23 +11,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-gray-100 text-gray-800">
-        {/* Header with navigation */}
-        <header className="bg-white shadow">
-          <nav className="flex items-center justify-between px-6 py-4">
+        <header className="bg-blue-500 text-white p-4">
+          <nav className="flex justify-between items-center max-w-4xl mx-auto">
             <h1 className="text-xl font-bold">Team Dashboard</h1>
-            <div className="flex space-x-6">
-              {/* Use Link components for internal navigation */}
-              <Link href="/" passHref>
-                <a className="text-blue-600 hover:underline">Home</a>
-              </Link>
-              <Link href="/tasks" passHref>
-                <a className="text-blue-600 hover:underline">Task Management</a>
-              </Link>
-            </div>
+            <ul className="flex space-x-4">
+              <li>
+                <a href="/" className="hover:underline">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="/tasks" className="hover:underline">
+                  Task Management
+                </a>
+              </li>
+            </ul>
           </nav>
         </header>
-        {/* Main content */}
-        <main className="container mx-auto p-6">{children}</main>
+        {children}
       </body>
     </html>
   );
