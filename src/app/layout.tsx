@@ -13,20 +13,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-gray-100 text-gray-800">
+        {/* Header with navigation */}
         <header className="bg-white shadow">
-          <nav className="flex items-center justify-between px-4 py-2">
+          <nav className="flex items-center justify-between px-6 py-4">
             <h1 className="text-xl font-bold">Team Dashboard</h1>
-            <div className="flex space-x-4">
-              <Link href="/" className="hover:underline">
-                Home
+            <div className="flex space-x-6">
+              {/* Use Link components for internal navigation */}
+              <Link href="/" passHref>
+                <a className="text-blue-600 hover:underline">Home</a>
               </Link>
-              <Link href="/tasks" className="hover:underline">
-                Task Management
+              <Link href="/tasks" passHref>
+                <a className="text-blue-600 hover:underline">Task Management</a>
               </Link>
             </div>
           </nav>
         </header>
-        <main>{children}</main>
+        {/* Main content */}
+        <main className="container mx-auto p-6">{children}</main>
       </body>
     </html>
   );
