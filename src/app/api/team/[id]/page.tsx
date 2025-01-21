@@ -1,27 +1,33 @@
-type TeamMember = {
-    id: number;
-    name: string;
-    role: string;
-    bio: string;
+// src/app/api/team/[id]/page.tsx
+import { NextPage } from 'next';
+
+interface PageProps {
+  params: {
+    id: string;
   };
-  
-  async function getTeamMember(id: string): Promise<TeamMember> {
-    const res = await fetch('http://localhost:3000/api/team');
-    const team: TeamMember[] = await res.json();
-    return team.find((member) => member.id === parseInt(id))!;
-  }
-  
-  export default async function TeamMemberPage({ params }: { params: { id: string } }) {
-    const member = await getTeamMember(params.id);
-  
-    if (!member) return <div>Member not found</div>;
-  
-    return (
-      <div className="p-6">
-        <h1 className="text-2xl font-bold">{member.name}</h1>
-        <p className="text-lg">{member.role}</p>
-        <p className="text-gray-600">{member.bio}</p>
+}
+
+const TeamMemberPage: NextPage<PageProps> = ({ params }) => {
+  const { id } = params;
+
+  // Fetch data or process `id` here (dummy data used as an example)
+  const teamMember = {
+    id: id,
+    name: "John Doe",
+    role: "Developer",
+    bio: "Experienced in React and Node.js",
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Team Member Details</h1>
+      <div className="p-4 border rounded shadow hover:bg-gray-100">
+        <h2 className="text-lg font-semibold">{teamMember.name}</h2>
+        <p>{teamMember.role}</p>
+        <p className="text-sm text-gray-600">{teamMember.bio}</p>
       </div>
-    );
-  }
-  
+    </div>
+  );
+};
+
+export default TeamMemberPage;
